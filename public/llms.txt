@@ -1,0 +1,17 @@
+# SAANJH by Pasalho
+
+SAANJH is an everyday staples brand by Pasalho serving value-conscious households and business buyers in Nepal. Its promise is: Clean. Correct Weight. Fair Price. In Nepali: सफा • पूरा तौल • सही दाम।
+
+## Main pages
+- Home: /en and /ne
+- Products: /en/products and /ne/products
+- About: /en/about and /ne/about
+- Retailer and distributor inquiries: /en/retailers and /ne/retailers
+- Contact: /en/contact and /ne/contact
+- FAQ: /en/faq and /ne/faq
+
+## Product category
+SAANJH currently presents packaged pulses and legumes including Masoor Dal, Moong Dal, Chana Dal, Rahar Dal, Maas Dal, Whole Chana, Bodi, Seto Kerau, Kabuli Chana and Kalo Bhatmas. Product pages state pack sizes, storage guidance, everyday uses and inquiry routes. No nutrition or organic claims are made.
+
+## Business contact
+For retail availability, product information, wholesale supply or distribution, use the Contact or Retailer page. The website does not provide checkout or online payment.

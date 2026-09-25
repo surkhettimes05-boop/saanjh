@@ -1,0 +1,7 @@
+import Image from 'next/image'
+import Link from 'next/link'
+import type { Locale } from '@/lib/i18n'
+import { messages } from '@/lib/i18n'
+import { whatsappUrl } from '@/lib/site-config'
+
+export function Header({locale}:{locale:Locale}){const m=messages[locale];const other=locale==='en'?'ne':'en';const links=[['',m.nav.home],['/products',m.nav.products],['/about',m.nav.about],['/retailers',m.nav.retailers],['/faq',m.nav.faq],['/contact',m.nav.contact]];return <header className="header"><div className="container header-row"><Link className="brand" href={`/${locale}`}><Image className="brand-mark" src="/images/brand/saanjh-logo.png" alt="SAANJH logo" width={60} height={60} priority/><span className="brand-name">SAANJH<small>साँझ · by Pasalho</small></span></Link><nav className="nav" aria-label="Main navigation">{links.map(([href,label])=><Link key={href} href={`/${locale}${href}`}>{label}</Link>)}<Link className="lang" href={`/${other}`}>{other==='ne'?'नेपाली':'English'}</Link><a className="button" href={whatsappUrl(locale==='en'?'Hello SAANJH, I would like to know more about your products.':'नमस्ते SAANJH, म तपाईंका उत्पादनबारे थप जान्न चाहन्छु।')} target="_blank" rel="noreferrer">{m.whatsapp}</a></nav><details className="mobile-panel"><summary aria-label="Open navigation">Menu ☰</summary><nav>{links.map(([href,label])=><Link key={href} href={`/${locale}${href}`}>{label}</Link>)}<Link href={`/${other}`}>{other==='ne'?'नेपाली':'English'}</Link></nav></details></div></header>}
