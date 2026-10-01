@@ -5,5 +5,77 @@ import { PageHero } from '@/components/PageHero'
 import { isLocale } from '@/lib/i18n'
 import { whatsappUrl } from '@/lib/site-config'
 import { pageMetadata } from '@/lib/seo'
-export async function generateMetadata({params}:{params:Promise<{locale:string}>}):Promise<Metadata>{const{locale}=await params;return pageMetadata(locale,'/retailers',locale==='en'?'Retailer and distributor inquiry':'विक्रेता तथा वितरक इन्क्वायरी',locale==='en'?'Stock SAANJH packaged pulses and staples. Contact us for retailer, wholesale and institutional supply inquiries in Nepal.':'SAANJH का प्याक गरिएका दाल तथा खाद्यान्न बिक्री गर्न खुद्रा, थोक वा संस्थागत इन्क्वायरी पठाउनुहोस्।')}
-export default async function Retailers({params}:{params:Promise<{locale:string}>}){const{locale}=await params;if(!isLocale(locale))notFound();const en=locale==='en';return <><PageHero eyebrow={en?'Retailers & distributors':'विक्रेता तथा वितरक'} title={en?'Stock SAANJH':'SAANJH बिक्री गर्नुहोस्'} text={en?'Interested in carrying SAANJH products in your store or business? Tell us a little about your requirement.':'आफ्नो पसल वा व्यवसायमा SAANJH उत्पादन राख्न इच्छुक हुनुहुन्छ? आफ्नो आवश्यकताबारे छोटकरीमा बताउनुहोस्।'}/><section className="section"><div className="container detail-grid"><div className="content"><h2>{en?'Who we work with':'हामी कससँग काम गर्छौं'}</h2><p>{en?'Grocery retailers, kirana stores, mini marts, wholesalers, hotels, restaurants and institutions can contact us about supply.':'किराना पसल, मिनी मार्ट, थोक विक्रेता, होटल, रेस्टुरेन्ट र संस्थाले आपूर्तिका लागि हामीलाई सम्पर्क गर्न सक्छन्।'}</p><ul><li>{en?'Clear product catalogue':'स्पष्ट उत्पादन सूची'}</li><li>{en?'Direct availability discussion':'उपलब्धताबारे प्रत्यक्ष छलफल'}</li><li>{en?'Support for business buyers':'व्यावसायिक खरिदकर्ताका लागि सहयोग'}</li></ul><h2>{en?'Prefer WhatsApp?':'ह्वाट्सएप रोज्नुहुन्छ?'}</h2><p>{en?'Send a short message with your business name and location.':'आफ्नो व्यवसायको नाम र स्थानसहित छोटो सन्देश पठाउनुहोस्।'}</p><a className="button secondary" href={whatsappUrl(en?'Hello SAANJH, I am interested in stocking SAANJH products in my store.':'नमस्ते SAANJH, म मेरो पसलमा SAANJH उत्पादन राख्न इच्छुक छु।')} target="_blank" rel="noreferrer">WhatsApp</a></div><div><InquiryForm locale={locale}/></div></div></section></>}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  return pageMetadata(
+    locale,
+    '/retailers',
+    locale === 'en' ? 'Retailer and distributor inquiry' : 'विक्रेता तथा वितरक इन्क्वायरी',
+    locale === 'en'
+      ? 'Stock SAANJH packaged pulses and staples. Contact us for retailer, wholesale and institutional supply inquiries in Nepal.'
+      : 'SAANJH का प्याक गरिएका दाल तथा खाद्यान्न बिक्री गर्न खुद्रा, थोक वा संस्थागत इन्क्वायरी पठाउनुहोस्।',
+  )
+}
+
+export default async function Retailers({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  if (!isLocale(locale)) notFound()
+  const en = locale === 'en'
+  const wa = whatsappUrl(
+    en
+      ? 'Hello SAANJH, I am interested in stocking SAANJH products in my store.'
+      : 'नमस्ते SAANJH, म मेरो पसलमा SAANJH उत्पादन राख्न इच्छुक छु।',
+  )
+
+  return (
+    <>
+      <PageHero
+        eyebrow={en ? 'Retailers & distributors' : 'विक्रेता तथा वितरक'}
+        title={en ? 'Stock SAANJH' : 'SAANJH बिक्री गर्नुहोस्'}
+        text={
+          en
+            ? 'Interested in carrying SAANJH products in your store or business? Tell us a little about your requirement.'
+            : 'आफ्नो पसल वा व्यवसायमा SAANJH उत्पादन राख्न इच्छुक हुनुहुन्छ? आफ्नो आवश्यकताबारे छोटकरीमा बताउनुहोस्।'
+        }
+      />
+      <section className="section">
+        <div className="container detail-grid">
+          <div className="content">
+            <h2>{en ? 'Who we work with' : 'हामी कससँग काम गर्छौं'}</h2>
+            <p>
+              {en
+                ? 'Grocery retailers, kirana stores, mini marts, wholesalers, hotels, restaurants and institutions can contact us about supply.'
+                : 'किराना पसल, मिनी मार्ट, थोक विक्रेता, होटल, रेस्टुरेन्ट र संस्थाले आपूर्तिका लागि हामीलाई सम्पर्क गर्न सक्छन्।'}
+            </p>
+            <ul>
+              <li>{en ? 'Clear product catalogue' : 'स्पष्ट उत्पादन सूची'}</li>
+              <li>{en ? 'Direct availability discussion' : 'उपलब्धताबारे प्रत्यक्ष छलफल'}</li>
+              <li>{en ? 'Support for business buyers' : 'व्यावसायिक खरिदकर्ताका लागि सहयोग'}</li>
+            </ul>
+            {wa && (
+              <>
+                <h2>{en ? 'Prefer WhatsApp?' : 'ह्वाट्सएप रोज्नुहुन्छ?'}</h2>
+                <p>
+                  {en
+                    ? 'Send a short message with your business name and location.'
+                    : 'आफ्नो व्यवसायको नाम र स्थानसहित छोटो सन्देश पठाउनुहोस्।'}
+                </p>
+                <a className="button secondary" href={wa} target="_blank" rel="noreferrer">
+                  WhatsApp
+                </a>
+              </>
+            )}
+          </div>
+          <div>
+            <InquiryForm locale={locale} />
+          </div>
+        </div>
+      </section>
+    </>
+  )
+}

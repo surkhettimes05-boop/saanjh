@@ -1,52 +1,90 @@
 # SAANJH by Pasalho website
 
-A fast, bilingual product-information website for SAANJH. It uses Next.js App Router, TypeScript and Tailwind CSS and exports as a static site. There is no cart, checkout or payment flow.
+Bilingual product-information and retailer-lead website for SAANJH, built with Next.js App Router, TypeScript and Tailwind CSS.
+
+## Production model
+
+The site runs as a normal Next.js deployment (recommended: Vercel). This intentionally keeps Next Image Optimization enabled so the large source product-pack PNGs are served to visitors as optimized AVIF/WebP derivatives instead of multi-megabyte originals.
+
+There is no cart, checkout or payment flow.
 
 ## Local development
 
-1. Copy `.env.example` to `.env.local` and replace the placeholders.
-2. Run `npm install`.
-3. Run `npm run dev`.
-4. Build with `npm run build`; the deployable output is written to `out/`.
+1. Copy `.env.example` to `.env.local`.
+2. Add the contact values you actually want published.
+3. Run `npm ci`.
+4. Run `npm run dev`.
+5. Validate with `npm run check`.
 
-The retailer form is only enabled when `NEXT_PUBLIC_INQUIRY_ENDPOINT` is configured. Until then, the page clearly directs inquiries to WhatsApp and does not show a fake success state. The receiving endpoint should validate fields again, reject the hidden `website` honeypot when filled, apply IP-based rate limiting and store or email the submission securely.
+Next.js 16 requires Node.js 20.9 or newer. The repository pins this requirement through `package.json#engines`.
 
-Analytics integration points are environment variables. Add the matching provider scripts only after consent and privacy requirements are confirmed.
+## Production configuration
 
-## SAANJH Content Management
+`NEXT_PUBLIC_SITE_URL` is required on a production Vercel deployment.
 
-### Add a new SKU
+At least one of these must also be configured:
 
-Add one object to `lib/products.ts`. Keep the slug unique and fill both English and Nepali fields, pack sizes, accent colours, storage, usage and status. Static product pages and the sitemap are generated from this file.
+- `NEXT_PUBLIC_PHONE`
+- `NEXT_PUBLIC_WHATSAPP`
+- `NEXT_PUBLIC_EMAIL`
 
-### Change a product image
+The production deployment fails instead of publishing fake placeholder contact data when these requirements are not met.
 
-Place the final optimized image in `public/images/products/`, then set the product's `image` value in `lib/products.ts`. If `image` is omitted, the site shows a branded fallback pack. Use descriptive filenames and keep the pack isolated on a clean background.
+For another hosting provider, set `SAANJH_REQUIRE_CONFIG=true` to enable the same guard.
 
-### Change phone or WhatsApp
+The retailer form is enabled only when `NEXT_PUBLIC_INQUIRY_ENDPOINT` is configured. The receiver must independently validate fields, reject the hidden `website` honeypot, rate-limit abuse and store or forward data securely. Without an endpoint the site exposes only real configured WhatsApp/email alternatives and never simulates a successful form submission.
 
-Set `NEXT_PUBLIC_PHONE` and `NEXT_PUBLIC_WHATSAPP` in the environment. WhatsApp must use country code plus number with digits only, for example `97798XXXXXXXX`. All contact links read from `lib/site-config.ts`.
+## Content architecture
 
-### Add social media links
+Public pages consume products through `lib/content-repository.ts`, not directly from the storage format. Today the repository uses the static records in `lib/products.ts`. A future admin panel can replace that repository with a database/API-backed implementation without rewriting page components.
 
-Set `NEXT_PUBLIC_FACEBOOK` and `NEXT_PUBLIC_INSTAGRAM`. Empty values are not rendered.
+### Product fields
 
-### Change SEO text
+Each product includes:
 
-Page metadata lives beside each route under `app/[locale]/`. Global defaults are in `app/layout.tsx`. Update `public/llms.txt` when brand facts or important routes change.
+- stable internal `id`
+- commercial `sku`
+- unique `slug`
+- `sortOrder`
+- `featured`
+- category
+- English and Nepali names/copy
+- pack sizes
+- storage/use guidance
+- image
+- `status`
 
-### Update translations
+Only products with `status: 'available'` are exposed through the public catalog, sitemap and product routes. This prevents an unfinished SKU from accidentally going live.
 
-Shared interface text is in `lib/i18n.ts`. Page-specific bilingual copy is kept in each route file. Keep facts aligned between English and Nepali.
+### Add or edit a SKU
 
-### Add a new product category
+Until the admin panel exists, update `lib/products.ts`. Keep IDs, SKUs and slugs unique. Set `featured` and `sortOrder` deliberately.
 
-Extend the `category` union in `lib/products.ts`, assign the category to relevant products, and add the category label to the Products page. Avoid empty category pages.
+### Product images
 
-### Add a future location page
+Place source pack images under `public/images/products/`. Next/Image performs runtime optimization on supported deployments. Keep originals reasonably sized anyway; the source files should still be compressed when final packaging assets are available.
 
-Add a real, useful route such as `app/[locale]/nepal/surkhet/page.tsx` only when there is verified local availability, contact or distribution information. Give it unique local content, metadata and internal links; do not mass-produce thin location pages.
+### Contact and social settings
 
-### Contact and business identity
+All phone, email, WhatsApp, location and social values are centralized in `lib/site-config.ts` and environment variables. Empty values are hidden rather than rendered as placeholders.
 
-All phone, email, WhatsApp, location, social and analytics placeholders are centralized in `lib/site-config.ts` and environment variables. Replace them before public launch.
+### SEO and language
+
+The site provides English and Nepali routes, canonical/hreflang metadata, sitemap, robots, structured product/FAQ data and Search Console verification through `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`. The root language chooser is deliberately `noindex`.
+
+A request proxy supplies the route locale to the root layout so the HTML `lang` attribute is correct for English and Nepali pages.
+
+## CI
+
+`.github/workflows/ci.yml` runs on pushes to `main` and pull requests:
+
+- `npm ci`
+- ESLint
+- TypeScript typecheck
+- production build
+
+Do not merge changes that fail CI.
+
+## Analytics
+
+GA/Meta IDs remain reserved configuration only. Tracking scripts should be added together with the required consent/privacy handling rather than silently loading trackers.
