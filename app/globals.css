@@ -132,3 +132,6 @@
   .product-detail-image{min-height:390px}
   .buy-path-card{padding:.9rem}
 }
+
+.mobile-buy-button,.mobile-stock-button{min-height:48px;text-align:center}
+.mobile-panel nav .button{width:100%}
