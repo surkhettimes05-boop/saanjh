@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     languages: {
       en: '/en',
       ne: '/ne',
-      'x-default': '/en',
+      'x-default': '/ne',
     },
   },
 }
@@ -22,11 +22,11 @@ export default function RootPage() {
         <h1>SAANJH · साँझ</h1>
         <p>Choose your language / भाषा छान्नुहोस्</p>
         <div className="actions">
-          <Link className="button" href="/en">
-            English
-          </Link>
-          <Link className="button secondary nepali" href="/ne">
+          <Link className="button nepali" href="/ne">
             नेपाली
+          </Link>
+          <Link className="button secondary" href="/en">
+            English
           </Link>
         </div>
       </div>
