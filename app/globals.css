@@ -99,3 +99,9 @@
   .hero-pack{width:min(90%,330px)}
   .pack-proof-card{min-height:360px}
 }
+
+.product-kicker{display:block;margin-bottom:.35rem;color:#8a6d62;font-size:.68rem;font-weight:850;letter-spacing:.08em;text-transform:uppercase}
+.product-bilingual-name{margin:.25rem 0 .65rem;color:#785c52;font-size:.92rem;font-weight:650}
+.product-card-facts{display:flex;flex-wrap:wrap;gap:.45rem;margin:.6rem 0 .85rem}
+.product-card-facts span{padding:.35rem .55rem;border-radius:99px;background:#f7ead8;color:#5b2a22;font-size:.75rem;font-weight:750}
+.product-card-link{display:inline-block;line-height:1.35}
