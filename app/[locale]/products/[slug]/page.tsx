@@ -23,6 +23,7 @@ export async function generateMetadata({
   const { locale, slug } = await params
   const product = catalog.findPublishedProduct(slug)
   if (!product) return {}
+
   const en = locale === 'en'
   const title = `${en ? product.nameEnglish : product.nameNepali} — ${product.packSizes.join(', ')}`
   const description = en ? product.descriptionEnglish : product.descriptionNepali
@@ -35,7 +36,7 @@ export async function generateMetadata({
       languages: {
         en: `/en/products/${slug}`,
         ne: `/ne/products/${slug}`,
-        'x-default': `/en/products/${slug}`,
+        'x-default': `/ne/products/${slug}`,
       },
     },
     openGraph: {
@@ -59,29 +60,55 @@ export default async function ProductPage({
 }) {
   const { locale, slug } = await params
   if (!isLocale(locale)) notFound()
+
   const product = catalog.findPublishedProduct(slug)
   if (!product) notFound()
 
   const en = locale === 'en'
   const name = en ? product.nameEnglish : product.nameNepali
+  const alternateName = en ? product.nameNepali : product.nameEnglish
   const description = en ? product.descriptionEnglish : product.descriptionNepali
-  const wa = whatsappUrl(`Hello SAANJH, I would like to know about ${product.nameEnglish}.`)
+  const consumerWa = whatsappUrl(
+    en
+      ? `Hello SAANJH, I want to buy ${product.nameEnglish} (${product.packSizes.join(', ')}). Please share the current price and nearest availability.`
+      : `नमस्ते SAANJH, म ${product.nameNepali} (${product.packSizes.join(', ')}) किन्न चाहन्छु। कृपया हालको मूल्य र नजिकको उपलब्धता बताउनुहोस्।`,
+  )
+  const retailerWa = whatsappUrl(
+    en
+      ? `Hello SAANJH, I want to stock ${product.nameEnglish} in my shop. Please share trade price, MOQ and supply details.`
+      : `नमस्ते SAANJH, म मेरो पसलमा ${product.nameNepali} स्टक गर्न चाहन्छु। कृपया व्यापारिक मूल्य, न्यूनतम अर्डर र आपूर्ति विवरण पठाउनुहोस्।`,
+  )
+
   const faq = en
     ? [
         { q: `What is ${product.nameEnglish}?`, a: description },
         {
-          q: `What pack size is available for ${product.nameEnglish}?`,
-          a: `The current catalogue lists ${product.packSizes.join(', ')}. Contact SAANJH to confirm availability.`,
+          q: `What pack size is available?`,
+          a: `The current catalogue lists ${product.packSizes.join(', ')}.`,
         },
-        { q: `How should ${product.nameEnglish} be stored?`, a: product.storageEnglish },
+        {
+          q: 'What is the current price?',
+          a: 'A verified retail MRP is not stored in the site data yet. Use the customer WhatsApp path for the current price; business buyers can request a trade quote.',
+        },
+        {
+          q: `How should ${product.nameEnglish} be stored?`,
+          a: product.storageEnglish,
+        },
       ]
     : [
         { q: `${product.nameNepali} के हो?`, a: description },
         {
-          q: `${product.nameNepali} कुन प्याक साइजमा उपलब्ध छ?`,
-          a: `हालको सूचीमा ${product.packSizes.join(', ')} प्याक उल्लेख छ। उपलब्धता पुष्टि गर्न SAANJH लाई सम्पर्क गर्नुहोस्।`,
+          q: 'कुन प्याक साइज उपलब्ध छ?',
+          a: `हालको सूचीमा ${product.packSizes.join(', ')} प्याक उल्लेख छ।`,
         },
-        { q: `${product.nameNepali} कसरी राख्ने?`, a: product.storageNepali },
+        {
+          q: 'हालको मूल्य कति हो?',
+          a: 'वेबसाइट डाटामा प्रमाणित खुद्रा MRP अझै राखिएको छैन। हालको मूल्यका लागि ग्राहक ह्वाट्सएप मार्ग प्रयोग गर्नुहोस्; व्यवसायिक खरिदकर्ताले व्यापारिक मूल्य माग्न सक्छन्।',
+        },
+        {
+          q: `${product.nameNepali} कसरी राख्ने?`,
+          a: product.storageNepali,
+        },
       ]
 
   const productSchema = {
@@ -96,6 +123,7 @@ export default async function ProductPage({
     sku: product.sku,
     size: product.packSizes.join(', '),
   }
+
   const breadcrumb = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -115,6 +143,7 @@ export default async function ProductPage({
       },
     ],
   }
+
   const related = catalog
     .listPublishedProducts(product.category)
     .filter((item) => item.slug !== product.slug)
@@ -123,72 +152,153 @@ export default async function ProductPage({
   return (
     <>
       <JsonLd data={[productSchema, breadcrumb]} />
-      <section className="section detail">
+
+      <section className="section detail product-detail-commerce">
         <div className="container">
           <nav className="breadcrumbs">
             <Link href={`/${locale}`}>{en ? 'Home' : 'गृहपृष्ठ'}</Link> /{' '}
             <Link href={`/${locale}/products`}>{en ? 'Products' : 'उत्पादन'}</Link> / {name}
           </nav>
+
           <div className="detail-grid">
-            <div className="detail-image" style={{ background: product.accentSoft }}>
+            <div className="detail-image product-detail-image" style={{ background: product.accentSoft }}>
               {product.image ? (
-                <Image src={product.image} alt={`${product.nameEnglish} SAANJH pack`} width={760} height={980} priority />
+                <Image
+                  src={product.image}
+                  alt={`${product.nameEnglish} SAANJH front pack`}
+                  width={760}
+                  height={980}
+                  priority
+                  sizes="(max-width: 720px) 92vw, 45vw"
+                />
               ) : (
                 <div
                   className="product-fallback"
                   style={{ '--accent': product.accentColor } as React.CSSProperties}
                 >
                   <div>
-                    SAANJH<span>{product.nameEnglish}</span>
-                    <small>{product.nameNepali}</small>
+                    SAANJH<span>{product.nameEnglish}</span><small>{product.nameNepali}</small>
                   </div>
                 </div>
               )}
+              <span className="pack-photo-tag">{en ? 'Front pack image' : 'अगाडिको प्याक फोटो'}</span>
             </div>
-            <div>
-              <span className="eyebrow">SAANJH · {product.category}</span>
+
+            <div className="product-buy-panel">
+              <span className="eyebrow">SAANJH · साँझ · {product.category}</span>
               <h1>{name}</h1>
-              <p className="nepali">{en ? product.nameNepali : product.nameEnglish}</p>
+              <p className="product-alt-name nepali">{alternateName}</p>
               <p className="lead">{description}</p>
+
+              <div className="detail-answer-grid">
+                <div>
+                  <span>{en ? 'What is it?' : 'यो के हो?'}</span>
+                  <strong>{en ? 'Packaged everyday dal / pulse' : 'प्याक गरिएको दैनिक दाल / गेडागुडी'}</strong>
+                </div>
+                <div>
+                  <span>{en ? 'Who is it for?' : 'कसका लागि?'}</span>
+                  <strong>{en ? 'Homes + food retailers' : 'घरपरिवार + खाद्यान्न विक्रेता'}</strong>
+                </div>
+                <div>
+                  <span>{en ? 'Pack size' : 'प्याक साइज'}</span>
+                  <strong>{product.packSizes.join(', ')}</strong>
+                </div>
+                <div>
+                  <span>{en ? 'Current price' : 'हालको मूल्य'}</span>
+                  <strong>{en ? 'Confirm before buying' : 'किन्नुअघि पुष्टि गर्नुहोस्'}</strong>
+                </div>
+              </div>
+
               <div className="pills">
-                <span className="pill">{en ? 'Clean' : 'सफा'}</span>
-                <span className="pill">{en ? 'Correct Weight' : 'पूरा तौल'}</span>
-                <span className="pill">{en ? 'Fair Price' : 'सही दाम'}</span>
+                <span className="pill">{en ? 'Correct weight promise' : 'पूरा तौलको प्रतिबद्धता'}</span>
+                <span className="pill">{en ? 'Clear pack size' : 'स्पष्ट प्याक साइज'}</span>
+                <span className="pill">SKU: {product.sku}</span>
               </div>
-              <div className="info-grid">
-                <div className="info-box">
-                  <strong>{en ? 'Available pack size' : 'उपलब्ध प्याक साइज'}</strong>
-                  {product.packSizes.join(', ')}
-                </div>
-                <div className="info-box">
-                  <strong>{en ? 'Storage' : 'भण्डारण'}</strong>
-                  {en ? product.storageEnglish : product.storageNepali}
-                </div>
-                <div className="info-box">
-                  <strong>{en ? 'Everyday use' : 'दैनिक प्रयोग'}</strong>
-                  {en ? product.useEnglish : product.useNepali}
-                </div>
-                <div className="info-box">
-                  <strong>{en ? 'Availability' : 'उपलब्धता'}</strong>
-                  {en
-                    ? 'Ask us for current retail or trade availability.'
-                    : 'हालको खुद्रा वा व्यापारिक उपलब्धताबारे हामीलाई सोध्नुहोस्।'}
-                </div>
+
+              <div className="buy-path-grid">
+                <article className="buy-path-card">
+                  <span className="path-label">{en ? 'Customer' : 'ग्राहक'}</span>
+                  <h2>{en ? 'Want to buy this pack?' : 'यो प्याक किन्न चाहनुहुन्छ?'}</h2>
+                  <p>
+                    {en
+                      ? 'Ask for the current price and nearest availability.'
+                      : 'हालको मूल्य र नजिकको उपलब्धता सोध्नुहोस्।'}
+                  </p>
+                  <div className="actions compact-actions">
+                    {consumerWa && (
+                      <a className="button whatsapp-button" href={consumerWa} target="_blank" rel="noreferrer">
+                        {en ? 'WhatsApp to buy' : 'किन्न ह्वाट्सएप'}
+                      </a>
+                    )}
+                    <Link className="button secondary" href={`/${locale}/contact`}>
+                      {en ? 'Where to buy' : 'कहाँ किन्ने'}
+                    </Link>
+                  </div>
+                </article>
+
+                <article className="buy-path-card trade-card">
+                  <span className="path-label">{en ? 'Retailer / distributor' : 'विक्रेता / वितरक'}</span>
+                  <h2>{en ? 'Want to stock it?' : 'स्टक गर्न चाहनुहुन्छ?'}</h2>
+                  <p>
+                    {en
+                      ? 'Request current trade price, MOQ and supply details.'
+                      : 'हालको व्यापारिक मूल्य, न्यूनतम अर्डर र आपूर्ति विवरण माग्नुहोस्।'}
+                  </p>
+                  <div className="actions compact-actions">
+                    <Link className="button secondary" href={`/${locale}/retailers`}>
+                      {en ? 'Stock this brand' : 'यो ब्रान्ड स्टक गर्नुहोस्'}
+                    </Link>
+                    {retailerWa && (
+                      <a className="text-link path-wa" href={retailerWa} target="_blank" rel="noreferrer">
+                        WhatsApp →
+                      </a>
+                    )}
+                  </div>
+                </article>
               </div>
-              <div className="actions">
-                {wa && (
-                  <a className="button" href={wa} target="_blank" rel="noreferrer">
-                    {en ? 'Ask on WhatsApp' : 'ह्वाट्सएपमा सोध्नुहोस्'}
-                  </a>
-                )}
-                <Link className="button secondary" href={`/${locale}/retailers`}>
-                  {en ? 'Retailer inquiry' : 'विक्रेता इन्क्वायरी'}
-                </Link>
-              </div>
+
+              <p className="price-note detail-price-note">
+                {en
+                  ? 'We do not invent an MRP: a verified price has not yet been entered in the website data.'
+                  : 'हामी बनावटी MRP राख्दैनौं: वेबसाइट डाटामा प्रमाणित मूल्य अझै प्रविष्ट गरिएको छैन।'}
+              </p>
             </div>
           </div>
         </div>
       </section>
+
+      <section className="section product-standard">
+        <div className="container detail-standard-grid">
+          <div>
+            <span className="eyebrow">{en ? 'Product facts' : 'उत्पादन तथ्य'}</span>
+            <h2>{en ? 'What you can verify now.' : 'अहिले नै जाँच्न मिल्ने कुरा।'}</h2>
+          </div>
+          <div className="info-grid product-info-grid">
+            <div className="info-box">
+              <strong>{en ? 'Pack size' : 'प्याक साइज'}</strong>
+              {product.packSizes.join(', ')}
+            </div>
+            <div className="info-box">
+              <strong>SKU</strong>
+              {product.sku}
+            </div>
+            <div className="info-box">
+              <strong>{en ? 'Storage' : 'भण्डारण'}</strong>
+              {en ? product.storageEnglish : product.storageNepali}
+            </div>
+            <div className="info-box">
+              <strong>{en ? 'Everyday use' : 'दैनिक प्रयोग'}</strong>
+              {en ? product.useEnglish : product.useNepali}
+            </div>
+          </div>
+          <p className="evidence-note back-photo-note">
+            {en
+              ? 'The repository currently contains the front pack artwork, but no verified production back-pack photograph. We leave that evidence missing rather than presenting a mock as proof.'
+              : 'रिपोजिटरीमा हाल अगाडिको प्याक आर्टवर्क छ, तर प्रमाणित उत्पादन पछाडिको प्याक फोटो छैन। प्रमाणको रूपमा नक्कली फोटो देखाउनुको सट्टा यो कुरा स्पष्ट राखिएको छ।'}
+          </p>
+        </div>
+      </section>
+
       <section className="section story">
         <div className="container">
           <div className="section-head">
@@ -200,6 +310,7 @@ export default async function ProductPage({
           <FaqList items={faq} />
         </div>
       </section>
+
       <section className="section">
         <div className="container">
           <div className="section-head">
