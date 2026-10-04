@@ -40,8 +40,8 @@ export default async function ProductsPage({
         title={en ? 'Everyday staples, clearly presented.' : 'दैनिक खाद्यान्न, स्पष्ट जानकारीसहित।'}
         text={
           en
-            ? 'Browse SAANJH pulses and beans. Product prices are not shown because availability and trade pricing may change.'
-            : 'SAANJH का दाल तथा गेडागुडी हेर्नुहोस्। उपलब्धता र व्यापारिक मूल्य परिवर्तन हुन सक्ने भएकाले यहाँ मूल्य देखाइएको छैन।'
+            ? 'Browse SAANJH pulses and beans. Current pack sizes are shown clearly; verified retail pricing is confirmed through the buying path until MRPs are entered in the catalogue.'
+            : 'SAANJH का दाल तथा गेडागुडी हेर्नुहोस्। हालको प्याक साइज स्पष्ट देखाइन्छ; सूचीमा प्रमाणित MRP प्रविष्ट नभएसम्म खरीद मार्गबाट हालको मूल्य पुष्टि गरिन्छ।'
         }
       />
       <section className="section">
