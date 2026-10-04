@@ -27,7 +27,7 @@ export async function generateMetadata({
       : 'सफा, सावधानीपूर्वक प्याक गरिएका दाल तथा घरायसी खाद्यान्न—पूरा तौल र सही मूल्यमा।',
     alternates: {
       canonical: `/${locale}`,
-      languages: { en: '/en', ne: '/ne', 'x-default': '/en' },
+      languages: { en: '/en', ne: '/ne', 'x-default': '/ne' },
     },
     openGraph: {
       title: 'SAANJH by Pasalho',
