@@ -105,3 +105,30 @@
 .product-card-facts{display:flex;flex-wrap:wrap;gap:.45rem;margin:.6rem 0 .85rem}
 .product-card-facts span{padding:.35rem .55rem;border-radius:99px;background:#f7ead8;color:#5b2a22;font-size:.75rem;font-weight:750}
 .product-card-link{display:inline-block;line-height:1.35}
+
+.product-detail-commerce{padding-top:3rem}
+.product-detail-image{position:relative}
+.pack-photo-tag{position:absolute;left:1rem;bottom:1rem;padding:.42rem .65rem;border-radius:99px;background:rgba(75,20,18,.92);color:#fff;font-size:.72rem;font-weight:850;letter-spacing:.05em;text-transform:uppercase}
+.product-buy-panel h1{margin:.45rem 0 .2rem;color:#4b1412;font-size:clamp(2.5rem,5vw,4.4rem);line-height:1}
+.product-alt-name{margin:.2rem 0 .75rem;color:#7b5a50;font-size:1.1rem;font-weight:700}
+.detail-answer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem;margin:1.2rem 0}
+.detail-answer-grid>div{padding:.9rem;border:1px solid #e4d0b7;border-radius:.8rem;background:#fffdf8}
+.detail-answer-grid span{display:block;margin-bottom:.3rem;color:#886d62;font-size:.72rem;font-weight:850;letter-spacing:.06em;text-transform:uppercase}
+.detail-answer-grid strong{display:block;color:#451612;line-height:1.4}
+.buy-path-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:1.25rem}
+.buy-path-card{padding:1rem;border:1px solid #dfc9ae;border-radius:.9rem;background:#fffdf8}
+.buy-path-card h2{margin:.5rem 0 .4rem;color:#4b1412;font-size:1.18rem;line-height:1.25}
+.buy-path-card p{margin:0;color:#70574d;line-height:1.55}
+.trade-card{background:#fff7eb}
+.detail-price-note{margin-top:1rem!important}
+.product-standard{background:#f8ead8}
+.detail-standard-grid>h2,.detail-standard-grid>div>h2{margin:.45rem 0 1.4rem;color:#4b1412;font-size:clamp(2rem,4vw,3.1rem)}
+.product-info-grid{margin-top:1.3rem}
+.back-photo-note{max-width:920px}
+@media(max-width:720px){
+  .product-detail-commerce{padding-top:2rem}
+  .detail-answer-grid,.buy-path-grid{grid-template-columns:1fr}
+  .product-buy-panel h1{font-size:clamp(2.25rem,12vw,3.4rem)}
+  .product-detail-image{min-height:390px}
+  .buy-path-card{padding:.9rem}
+}
