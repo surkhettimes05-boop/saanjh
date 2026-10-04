@@ -1,88 +1,80 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ProductCard } from '@/components/ProductCard'
 import { FaqList } from '@/components/FaqList'
 import { catalog } from '@/lib/content-repository'
 import { isLocale } from '@/lib/i18n'
-import { whatsappUrl } from '@/lib/site-config'
+import { siteConfig, whatsappUrl } from '@/lib/site-config'
 
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   if (!isLocale(locale)) notFound()
 
   const en = locale === 'en'
-  const featuredProducts = [...catalog.listFeaturedProducts(8)]
-  const heroProduct = featuredProducts[0]
+  const dalProducts = [...catalog.listPublishedProducts('pulses')]
   const consumerWa = whatsappUrl(
     en
-      ? 'Hello SAANJH, I want to buy SAANJH dal/pulses. Please share the current price and nearest place to buy.'
-      : 'नमस्ते SAANJH, म SAANJH दाल/गेडागुडी किन्न चाहन्छु। कृपया हालको मूल्य र नजिकै कहाँ पाइन्छ जानकारी दिनुहोस्।',
+      ? 'Hello SAANJH, I want to buy SAANJH dal. Please share the current price and nearest place to buy.'
+      : 'नमस्ते SAANJH, म SAANJH दाल किन्न चाहन्छु। कृपया हालको मूल्य र नजिकै कहाँ पाइन्छ जानकारी दिनुहोस्।',
   )
   const retailerWa = whatsappUrl(
     en
-      ? 'Hello SAANJH, I want to stock SAANJH in my shop. Please share the retailer/distributor price, MOQ and supply details.'
-      : 'नमस्ते SAANJH, म मेरो पसलमा SAANJH राख्न चाहन्छु। कृपया विक्रेता/वितरक मूल्य, न्यूनतम अर्डर र आपूर्ति विवरण पठाउनुहोस्।',
+      ? 'Hello SAANJH, I want to stock SAANJH in my shop. Please share the current retailer price, MOQ, margin structure and supply details.'
+      : 'नमस्ते SAANJH, म मेरो पसलमा SAANJH राख्न चाहन्छु। कृपया हालको विक्रेता मूल्य, न्यूनतम अर्डर, मार्जिन संरचना र आपूर्ति विवरण पठाउनुहोस्।',
   )
+
+  const promises = en
+    ? [
+        ['01', 'CLEAN', 'सफा', 'Packed for everyday household confidence with clear storage guidance.'],
+        ['02', 'CORRECT WEIGHT', 'पूरा तौल', 'The pack size is stated clearly: the current dal catalogue is 1 kg.'],
+        ['03', 'FAIR PRICE', 'सही दाम', 'No invented MRP. We confirm the current price before you buy.'],
+      ]
+    : [
+        ['01', 'सफा', 'CLEAN', 'दैनिक घरायसी भरोसाका लागि प्याकिङ र स्पष्ट भण्डारण जानकारी।'],
+        ['02', 'पूरा तौल', 'CORRECT WEIGHT', 'प्याक साइज स्पष्ट: हालको दाल सूची १ केजी हो।'],
+        ['03', 'सही दाम', 'FAIR PRICE', 'बनावटी MRP होइन। किन्नुअघि हालको मूल्य पुष्टि गरिन्छ।'],
+      ]
 
   const faqs = en
     ? [
         {
           q: 'What exactly is SAANJH?',
-          a: 'SAANJH by Pasalho is a packaged everyday staples brand focused on dal, pulses, chickpeas and beans for Nepali kitchens.',
+          a: 'SAANJH by Pasalho is a packaged everyday staples brand focused on dal and other familiar household staples for Nepali kitchens.',
         },
         {
-          q: 'Who is it for?',
-          a: 'Households buying everyday staples and retailers, wholesalers, hotels, restaurants and institutions that want to stock them.',
-        },
-        {
-          q: 'What pack size is available?',
-          a: 'The published catalogue currently lists 1 kg packs.',
-        },
-        {
-          q: 'What is the current price?',
-          a: 'A verified retail MRP is not stored in the website data yet. Use WhatsApp for the current consumer price; business buyers can request the current trade quote.',
+          q: 'What does “correct weight” mean?',
+          a: 'It means the stated pack quantity is the quantity SAANJH commits to pack. The current dal catalogue is clearly labelled as 1 kg instead of relying on an informal loose-weight estimate.',
         },
         {
           q: 'Where can I buy SAANJH?',
-          a: 'Use “Where to buy” or WhatsApp and share your location. We will point you to current availability instead of showing an unverified store list.',
+          a: siteConfig.location
+            ? `Ask for SAANJH in ${siteConfig.location}, or message us with your location so we can confirm current availability.`
+            : 'Ask for SAANJH at your local store, or message us with your location so we can confirm current availability.',
+        },
+        {
+          q: 'Can my shop stock SAANJH?',
+          a: 'Yes. Retailers and distributors can request the current trade price, margin structure, minimum order and supply availability from the retailer page.',
         },
       ]
     : [
         {
           q: 'SAANJH वास्तवमा के हो?',
-          a: 'SAANJH by Pasalho नेपाली भान्साका लागि दाल, गेडागुडी र चना जस्ता दैनिक खाद्यान्न प्याक गरेर उपलब्ध गराउने ब्रान्ड हो।',
+          a: 'SAANJH by Pasalho नेपाली भान्साका लागि दाल तथा परिचित दैनिक खाद्यान्न प्याक गरेर उपलब्ध गराउने ब्रान्ड हो।',
         },
         {
-          q: 'यो कसका लागि हो?',
-          a: 'दैनिक खाद्यान्न किन्ने घरपरिवार तथा बिक्री/आपूर्ति गर्न चाहने किराना, मिनीमार्ट, थोक विक्रेता, होटल, रेस्टुरेन्ट र संस्थाका लागि।',
-        },
-        {
-          q: 'कुन प्याक साइज उपलब्ध छ?',
-          a: 'हाल प्रकाशित उत्पादन सूचीमा १ केजी प्याक उपलब्ध देखाइएको छ।',
-        },
-        {
-          q: 'हालको मूल्य कति हो?',
-          a: 'वेबसाइटको डाटामा प्रमाणित खुद्रा MRP अझै राखिएको छैन। हालको ग्राहक मूल्यका लागि ह्वाट्सएप गर्नुहोस्; व्यवसायिक खरिदकर्ताले व्यापारिक मूल्य माग्न सक्छन्।',
+          q: '“पूरा तौल” भनेको के हो?',
+          a: 'प्याकमा लेखिएको परिमाण नै SAANJH ले प्याक गर्ने प्रतिबद्धता हो। हालको दाल सूची १ केजी भनेर स्पष्ट लेखिन्छ; अनौपचारिक खुला तौलमा निर्भर हुँदैन।',
         },
         {
           q: 'SAANJH कहाँ किन्न पाइन्छ?',
-          a: '“कहाँ किन्ने” वा ह्वाट्सएप प्रयोग गरेर आफ्नो स्थान पठाउनुहोस्। अप्रमाणित पसल सूची देखाउनुको सट्टा हामी हालको उपलब्धता बताउँछौं।',
+          a: siteConfig.location
+            ? `${siteConfig.location} मा SAANJH माग्नुहोस्, वा आफ्नो स्थान ह्वाट्सएप गरेर हालको उपलब्धता पुष्टि गर्नुहोस्।`
+            : 'आफ्नो स्थानीय पसलमा SAANJH माग्नुहोस्, वा आफ्नो स्थान ह्वाट्सएप गरेर हालको उपलब्धता पुष्टि गर्नुहोस्।',
         },
-      ]
-
-  const standard = en
-    ? [
-        ['Choose useful staples', 'Products are selected around familiar, repeat household use.'],
-        ['State the pack clearly', 'The current catalogue uses a clearly stated 1 kg pack size.'],
-        ['Pack for dependable everyday use', 'Clean handling, correct weight and practical product information are the operating promise.'],
-        ['Make buying simple', 'Consumers get a direct availability path; retailers get a separate stock inquiry path.'],
-      ]
-    : [
-        ['काम लाग्ने दैनिक खाद्यान्न छनोट', 'बारम्बार प्रयोग हुने परिचित घरायसी खाद्यान्नलाई प्राथमिकता।'],
-        ['प्याक स्पष्ट लेख्ने', 'हालको सूचीमा १ केजी प्याक साइज स्पष्ट रूपमा उल्लेख गरिएको छ।'],
-        ['दैनिक भरोसाका लागि प्याकिङ', 'सफा ह्यान्डलिङ, पूरा तौल र स्पष्ट उत्पादन जानकारी हाम्रो सञ्चालन प्रतिबद्धता हो।'],
-        ['किन्न सजिलो बनाउने', 'ग्राहकका लागि उपलब्धता मार्ग र विक्रेताका लागि छुट्टै स्टक इन्क्वायरी मार्ग।'],
+        {
+          q: 'मेरो पसलले SAANJH स्टक गर्न सक्छ?',
+          a: 'सक्छ। विक्रेता तथा वितरकले retailer page बाट हालको व्यापारिक मूल्य, मार्जिन संरचना, न्यूनतम अर्डर र आपूर्ति उपलब्धता माग्न सक्छन्।',
+        },
       ]
 
   return (
@@ -90,36 +82,26 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       <section className="hero hero-commerce">
         <div className="container hero-grid">
           <div className="hero-copy">
-            <span className="eyebrow">{en ? 'दाल • गेडागुडी • दैनिक खाद्यान्न' : 'Pulses • beans • everyday staples'}</span>
+            <span className="eyebrow">SAANJH · साँझ · by Pasalho</span>
             <h1>
-              <span className="hero-primary">{en ? 'Everyday dal and pulses, packed simply.' : 'दैनिक दाल र गेडागुडी, भरोसाका साथ प्याक गरिएको।'}</span>
+              <span className="hero-primary">
+                {en ? 'Everyday dal. No confusion.' : 'दैनिक दाल। कुनै अलमल बिना।'}
+              </span>
               <span className="hero-secondary nepali">
-                {en ? 'दैनिक दाल र गेडागुडी, भरोसाका साथ प्याक गरिएको।' : 'Everyday dal and pulses, packed simply.'}
+                {en ? 'सफा · पूरा तौल · सही दाम' : 'Clean · Correct Weight · Fair Price'}
               </span>
             </h1>
             <p className="hero-lead">
               {en
-                ? 'SAANJH by Pasalho is for Nepali households and the shops that serve them: familiar staples, clear 1 kg packs, direct availability and separate retailer supply.'
-                : 'SAANJH by Pasalho नेपाली घरपरिवार र उनीहरूलाई सेवा दिने पसलका लागि हो—परिचित दैनिक खाद्यान्न, स्पष्ट १ केजी प्याक, सजिलो उपलब्धता र छुट्टै विक्रेता आपूर्ति।'}
+                ? 'Packaged dal for Nepali households and the retailers who serve them — clear 1 kg packs, direct buying help and a separate trade supply path.'
+                : 'नेपाली घरपरिवार र उनीहरूलाई सेवा दिने विक्रेताका लागि प्याक गरिएको दाल — स्पष्ट १ केजी प्याक, सजिलो खरीद सहायता र छुट्टै व्यापारिक आपूर्ति मार्ग।'}
             </p>
 
             <div className="hero-facts" aria-label={en ? 'Product summary' : 'उत्पादन सारांश'}>
-              <div>
-                <span>{en ? 'What' : 'के'}</span>
-                <strong>{en ? 'Packaged dal & pulses' : 'प्याक गरिएको दाल/गेडागुडी'}</strong>
-              </div>
-              <div>
-                <span>{en ? 'For' : 'कसका लागि'}</span>
-                <strong>{en ? 'Homes + retailers' : 'घरपरिवार + विक्रेता'}</strong>
-              </div>
-              <div>
-                <span>{en ? 'Size' : 'साइज'}</span>
-                <strong>{en ? '1 kg packs' : '१ केजी प्याक'}</strong>
-              </div>
-              <div>
-                <span>{en ? 'Price' : 'मूल्य'}</span>
-                <strong>{en ? 'Confirm current price' : 'हालको मूल्य पुष्टि गर्नुहोस्'}</strong>
-              </div>
+              <div><span>{en ? 'Product' : 'उत्पादन'}</span><strong>{en ? 'Packaged dals' : 'प्याक गरिएको दाल'}</strong></div>
+              <div><span>{en ? 'For' : 'कसका लागि'}</span><strong>{en ? 'Homes + retailers' : 'घरपरिवार + विक्रेता'}</strong></div>
+              <div><span>{en ? 'Pack size' : 'प्याक साइज'}</span><strong>{en ? '1 kg' : '१ केजी'}</strong></div>
+              <div><span>{en ? 'Buy' : 'किन्ने तरिका'}</span><strong>{en ? 'Local store / WhatsApp' : 'स्थानीय पसल / ह्वाट्सएप'}</strong></div>
             </div>
 
             <div className="purchase-paths">
@@ -140,151 +122,167 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                 <span className="path-label">{en ? 'For retailers / distributors' : 'विक्रेता / वितरकका लागि'}</span>
                 <div className="actions compact-actions">
                   <Link className="button secondary" href={`/${locale}/retailers`}>
-                    {en ? 'Stock this brand' : 'यो ब्रान्ड स्टक गर्नुहोस्'}
+                    {en ? 'See retailer terms' : 'विक्रेता सर्त हेर्नुहोस्'}
                   </Link>
                   {retailerWa && (
                     <a className="text-link path-wa" href={retailerWa} target="_blank" rel="noreferrer">
-                      {en ? 'Ask trade price on WhatsApp →' : 'व्यापारिक मूल्य ह्वाट्सएपमा सोध्नुहोस् →'}
+                      {en ? 'Ask margin & trade price →' : 'मार्जिन र व्यापारिक मूल्य सोध्नुहोस् →'}
                     </a>
                   )}
                 </div>
               </div>
             </div>
-
-            <p className="price-note">
-              {en
-                ? 'Price transparency: verified MRPs are not stored in the site data yet, so we do not publish made-up prices.'
-                : 'मूल्य पारदर्शिता: वेबसाइट डाटामा प्रमाणित MRP अझै राखिएको छैन, त्यसैले हामी बनावटी मूल्य देखाउँदैनौं।'}
-            </p>
           </div>
 
           <div className="hero-visual hero-pack-card">
             <div className="sun" />
             <Image
               className="hero-pack"
-              src="/images/products/chana-dal.png"
-              alt="SAANJH Chana Dal 1 kg front pack"
+              src="/images/products/rahar-dal.png"
+              alt="SAANJH Rahar Dal 1 kg front pack"
               width={800}
               height={1000}
               priority
               sizes="(max-width: 720px) 86vw, 42vw"
             />
             <div className="pack-caption">
-              <strong>{en ? 'Actual pack artwork in the catalogue' : 'उत्पादन सूचीमा रहेको वास्तविक प्याक आर्टवर्क'}</strong>
-              <span>{en ? 'Chana Dal • चना दाल • 1 kg' : 'चना दाल • Chana Dal • १ केजी'}</span>
+              <strong>{en ? 'Rahar Dal / रहर दाल' : 'रहर दाल / Rahar Dal'}</strong>
+              <span>{en ? 'Front pack • 1 kg' : 'अगाडिको प्याक • १ केजी'}</span>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="trust-strip">
-        <div className="container trust-grid trust-grid-four">
-          {[
-            [en ? 'Correct weight' : 'पूरा तौल', en ? 'पूरा तौल' : 'Correct weight'],
-            [en ? 'Clear pack size' : 'स्पष्ट प्याक साइज', en ? '१ केजी' : '1 kg'],
-            [en ? 'Product SKU' : 'उत्पादन SKU', heroProduct?.sku ?? 'SAANJH'],
-            [en ? 'No inflated claims' : 'अतिरञ्जित दाबी छैन', en ? 'Facts before promises' : 'दाबीभन्दा पहिले तथ्य'],
-          ].map(([title, sub]) => (
-            <div className="trust-item" key={title}>
-              <span className="trust-icon">✓</span>
-              <div>
-                <strong>{title}</strong>
-                <span className="nepali">{sub}</span>
-              </div>
-            </div>
+      <section className="promise-stage" aria-label={en ? 'SAANJH promises' : 'SAANJH का प्रतिबद्धता'}>
+        <div className="container promise-stage-grid">
+          {promises.map(([number, title, alt, text]) => (
+            <article className="promise-card" key={number}>
+              <span className="promise-number">{number}</span>
+              <div className="promise-mark">✓</div>
+              <h2>{title}</h2>
+              <strong className="promise-alt nepali">{alt}</strong>
+              <p>{text}</p>
+            </article>
           ))}
         </div>
       </section>
 
-      <section className="section proof-section">
+      <section className="section dal-showcase">
         <div className="container">
           <div className="section-head">
             <div>
-              <span className="eyebrow">{en ? 'Proof before promises' : 'दाबीभन्दा पहिले प्रमाण'}</span>
-              <h2>{en ? 'See the pack. Check the facts.' : 'प्याक हेर्नुहोस्। तथ्य जाँच्नुहोस्।'}</h2>
+              <span className="eyebrow">{en ? 'The dal shelf' : 'हाम्रो दाल सूची'}</span>
+              <h2>{en ? 'See every SAANJH dal pack.' : 'हरेक SAANJH दाल प्याक हेर्नुहोस्।'}</h2>
             </div>
             <p>
               {en
-                ? 'We show what can be verified from the current product records and pack artwork, and avoid pretending missing information is already finalized.'
-                : 'हालको उत्पादन रेकर्ड र प्याक आर्टवर्कबाट जाँच्न मिल्ने कुरा मात्र देखाइन्छ; नभएको जानकारीलाई तयार भइसकेको जस्तो देखाइँदैन।'}
+                ? 'Front-pack assets are shown at large size with the current 1 kg pack weight visible beside each product.'
+                : 'हरेक उत्पादनसँग हालको १ केजी प्याक तौल स्पष्ट देखिने गरी अगाडिको प्याक सम्पत्ति ठूलो आकारमा राखिएको छ।'}
             </p>
           </div>
 
-          <div className="pack-proof-grid">
-            <article className="pack-proof-card">
-              <span className="pack-side-label">{en ? 'Front pack' : 'अगाडिको प्याक'}</span>
-              <Image
-                src="/images/products/chana-dal.png"
-                alt="SAANJH Chana Dal front pack"
-                width={620}
-                height={800}
-                sizes="(max-width: 720px) 90vw, 42vw"
-              />
-            </article>
-            <article className="pack-proof-card back-label-card">
-              <span className="pack-side-label">{en ? 'Back-label facts' : 'पछाडिको लेबलका तथ्य'}</span>
-              <div className="back-label-content">
-                <span className="eyebrow">SAANJH · साँझ</span>
-                <h3>{en ? 'Information we make easy to verify' : 'सजिलै जाँच्न मिल्ने जानकारी'}</h3>
-                <dl className="proof-facts">
-                  <div><dt>{en ? 'Product' : 'उत्पादन'}</dt><dd>{en ? 'Chana Dal / चना दाल' : 'चना दाल / Chana Dal'}</dd></div>
-                  <div><dt>{en ? 'Pack size' : 'प्याक साइज'}</dt><dd>{en ? '1 kg' : '१ केजी'}</dd></div>
-                  <div><dt>SKU</dt><dd>SAANJH-CHANA-DAL-1KG</dd></div>
-                  <div><dt>{en ? 'Storage' : 'भण्डारण'}</dt><dd>{en ? 'Cool, dry place; keep sealed.' : 'चिसो, सुख्खा ठाउँमा बन्द गरेर राख्नुहोस्।'}</dd></div>
-                </dl>
-                <p className="evidence-note">
-                  {en
-                    ? 'A final production back-pack photograph is not in the repository yet, so we do not fake one. Add the real photo here when available.'
-                    : 'अन्तिम उत्पादनको पछाडिको प्याक फोटो रिपोजिटरीमा अझै छैन, त्यसैले नक्कली फोटो देखाइएको छैन। वास्तविक फोटो आएपछि यहीँ राख्नुहोस्।'}
-                </p>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="container">
-          <div className="section-head">
-            <div>
-              <span className="eyebrow">{en ? 'Products / उत्पादन' : 'उत्पादन / Products'}</span>
-              <h2>{en ? 'Everyday staples for Nepali kitchens.' : 'नेपाली भान्साका दैनिक खाद्यान्न।'}</h2>
-            </div>
-            <p>
-              {en
-                ? 'Product names stay bilingual so customers and shopkeepers can recognize the item immediately.'
-                : 'ग्राहक र पसलेले तुरुन्त चिन्न सकून् भनेर उत्पादन नाम नेपाली र अंग्रेजी दुवैमा राखिएको छ।'}
-            </p>
-          </div>
-          <div className="product-grid">
-            {featuredProducts.map((product) => (
-              <ProductCard key={product.slug} product={product} locale={locale} />
-            ))}
-          </div>
-          <div className="actions">
-            <Link className="button secondary" href={`/${locale}/products`}>
-              {en ? 'See all products' : 'सबै उत्पादन हेर्नुहोस्'} →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="section standard-section">
-        <div className="container">
-          <div className="section-head">
-            <div>
-              <span className="eyebrow">{en ? 'Our standard' : 'हाम्रो मापदण्ड'}</span>
-              <h2>{en ? 'Simple food should have a simple standard.' : 'साधारण खाद्यान्नको मापदण्ड पनि स्पष्ट हुनुपर्छ।'}</h2>
-            </div>
-          </div>
-          <div className="standard-steps">
-            {standard.map(([title, body], index) => (
-              <article className="standard-step" key={title}>
-                <span>{String(index + 1).padStart(2, '0')}</span>
-                <h3>{title}</h3>
-                <p>{body}</p>
+          <div className="dal-pack-grid">
+            {dalProducts.map((product) => (
+              <article className="dal-pack-card" key={product.slug} style={{ '--accent-soft': product.accentSoft } as React.CSSProperties}>
+                <div className="dal-pack-visual">
+                  {product.image ? (
+                    <Image
+                      src={product.image}
+                      alt={`${product.nameEnglish} / ${product.nameNepali} SAANJH front pack`}
+                      width={620}
+                      height={800}
+                      sizes="(max-width: 720px) 92vw, (max-width: 1100px) 44vw, 30vw"
+                    />
+                  ) : (
+                    <div className="photo-pending">
+                      <strong>{en ? 'Pack photo pending' : 'प्याक फोटो आउन बाँकी'}</strong>
+                      <span>{en ? 'We will not substitute a fake pack photo.' : 'नक्कली प्याक फोटो राखिँदैन।'}</span>
+                    </div>
+                  )}
+                </div>
+                <div className="dal-pack-info">
+                  <div>
+                    <h3>{en ? product.nameEnglish : product.nameNepali}</h3>
+                    <span className="nepali">{en ? product.nameNepali : product.nameEnglish}</span>
+                  </div>
+                  <strong className="weight-badge">{en ? '1 KG' : '१ केजी'}</strong>
+                </div>
+                <Link className="text-link" href={`/${locale}/products/${product.slug}`}>
+                  {en ? 'View product details' : 'उत्पादन विवरण हेर्नुहोस्'} →
+                </Link>
               </article>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section weight-section">
+        <div className="container">
+          <div className="section-head">
+            <div>
+              <span className="eyebrow">{en ? 'What correct weight means for you' : 'पूरा तौलले तपाईंलाई के दिन्छ?'}</span>
+              <h2>{en ? 'You should know what quantity you are paying for.' : 'तपाईंले कति परिमाणका लागि पैसा तिर्दै हुनुहुन्छ भन्ने स्पष्ट हुनुपर्छ।'}</h2>
+            </div>
+          </div>
+
+          <div className="weight-compare">
+            <article className="weight-side loose-side">
+              <span className="compare-label">{en ? 'Loose / informal purchase' : 'खुला / अनौपचारिक खरीद'}</span>
+              <div className="scale-visual">?</div>
+              <h3>{en ? 'The quantity can be harder to verify.' : 'परिमाण तुरुन्त जाँच्न गाह्रो हुन सक्छ।'}</h3>
+              <p>
+                {en
+                  ? 'Loose dal may be weighed differently from shop to shop. The customer has to rely on the measurement made at the counter.'
+                  : 'खुला दाल पसलअनुसार फरक तरिकाले तौलिन सक्छ। ग्राहकले काउन्टरमा गरिएको तौलमा भरोसा गर्नुपर्छ।'}
+              </p>
+            </article>
+            <article className="weight-side saanjh-side">
+              <span className="compare-label">{en ? 'SAANJH packed dal' : 'SAANJH प्याक गरिएको दाल'}</span>
+              <div className="scale-visual">1 KG</div>
+              <h3>{en ? 'The pack quantity is stated before you buy.' : 'किन्नुअघि नै प्याक परिमाण स्पष्ट हुन्छ।'}</h3>
+              <p>
+                {en
+                  ? 'The current dal catalogue is sold as a clearly stated 1 kg pack. That is what “Correct Weight” means in the SAANJH promise.'
+                  : 'हालको दाल सूची स्पष्ट रूपमा १ केजी प्याकमा छ। SAANJH को “पूरा तौल” प्रतिबद्धताको अर्थ यही हो।'}
+              </p>
+            </article>
+          </div>
+          <p className="comparison-note">
+            {en
+              ? 'This is a comparison of buying formats, not a claim that every loose-dal seller under-weighs products.'
+              : 'यो खरीद शैलीको तुलना हो; हरेक खुला दाल विक्रेताले कम तौल दिन्छ भन्ने दाबी होइन।'}
+          </p>
+        </div>
+      </section>
+
+      <section className="section availability-section">
+        <div className="container availability-box">
+          <div>
+            <span className="eyebrow light-eyebrow">{en ? 'Find SAANJH' : 'SAANJH खोज्नुहोस्'}</span>
+            <h2>
+              {siteConfig.location
+                ? en
+                  ? `Currently serving enquiries in ${siteConfig.location}.`
+                  : `हाल ${siteConfig.location} मा इन्क्वायरी सेवा।`
+                : en
+                  ? 'Ask for SAANJH at your local store.'
+                  : 'आफ्नो स्थानीय पसलमा SAANJH माग्नुहोस्।'}
+            </h2>
+            <p>
+              {en
+                ? 'Send your area or store name and we will confirm current availability rather than showing an unverified stockist list.'
+                : 'आफ्नो क्षेत्र वा पसलको नाम पठाउनुहोस्। अप्रमाणित स्टकिस्ट सूची देखाउनुको सट्टा हामी हालको उपलब्धता पुष्टि गर्छौं।'}
+            </p>
+          </div>
+          <div className="actions">
+            {consumerWa && (
+              <a className="button" href={consumerWa} target="_blank" rel="noreferrer">
+                {en ? 'Check nearest availability' : 'नजिकको उपलब्धता जाँच्नुहोस्'}
+              </a>
+            )}
+            <Link className="button secondary" href={`/${locale}/contact`}>
+              {en ? 'Where to buy' : 'कहाँ किन्ने'}
+            </Link>
           </div>
         </div>
       </section>
@@ -292,17 +290,17 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       <section className="section retailer">
         <div className="container retailer-box retailer-box-strong">
           <div>
-            <span className="eyebrow light-eyebrow">{en ? 'For shops & distributors' : 'पसल तथा वितरकका लागि'}</span>
-            <h2>{en ? 'Want to stock SAANJH?' : 'SAANJH स्टक गर्न चाहनुहुन्छ?'}</h2>
+            <span className="eyebrow light-eyebrow">{en ? 'For retailers' : 'विक्रेताका लागि'}</span>
+            <h2>{en ? 'Know the margin logic before you stock.' : 'स्टक गर्नुअघि मार्जिनको हिसाब बुझ्नुहोस्।'}</h2>
             <p>
               {en
-                ? 'Use the business path for current trade price, MOQ, product availability and supply discussion.'
-                : 'हालको व्यापारिक मूल्य, न्यूनतम अर्डर, उत्पादन उपलब्धता र आपूर्तिबारे व्यवसायिक मार्ग प्रयोग गर्नुहोस्।'}
+                ? 'The retailer page now explains margin calculation, what to ask for in a trade quote, and how availability and reordering are handled.'
+                : 'विक्रेता पृष्ठमा अब मार्जिन गणना, व्यापारिक कोटेसनमा के माग्ने र उपलब्धता/पुनःअर्डर कसरी सम्हालिन्छ भन्ने स्पष्ट छ।'}
             </p>
           </div>
           <div className="actions">
             <Link className="button" href={`/${locale}/retailers`}>
-              {en ? 'Become a retailer / Stock SAANJH' : 'विक्रेता बन्नुहोस् / SAANJH स्टक गर्नुहोस्'}
+              {en ? 'Retailer margin & supply →' : 'विक्रेता मार्जिन र आपूर्ति →'}
             </Link>
             {retailerWa && (
               <a className="button secondary" href={retailerWa} target="_blank" rel="noreferrer">
@@ -318,7 +316,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           <div className="section-head">
             <div>
               <span className="eyebrow">FAQ</span>
-              <h2>{en ? 'The buying questions, answered first.' : 'किन्ने बेला चाहिने प्रश्नको स्पष्ट उत्तर।'}</h2>
+              <h2>{en ? 'Clear answers before you buy or stock.' : 'किन्नु वा स्टक गर्नु अघि स्पष्ट उत्तर।'}</h2>
             </div>
           </div>
           <FaqList items={faqs} />
