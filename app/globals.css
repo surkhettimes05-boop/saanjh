@@ -135,3 +135,102 @@
 
 .mobile-buy-button,.mobile-stock-button{min-height:48px;text-align:center}
 .mobile-panel nav .button{width:100%}
+
+
+/* SAANJH promise, weight and retailer system */
+.promise-stage{padding:1rem 0 4.5rem;background:var(--maroon);color:#fff}
+.promise-stage-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.promise-card{position:relative;min-height:330px;padding:1.6rem;border:1px solid rgba(255,255,255,.18);border-radius:1.15rem;background:rgba(255,255,255,.07);overflow:hidden}
+.promise-number{position:absolute;right:1rem;top:.8rem;color:rgba(255,255,255,.35);font-size:3.5rem;font-weight:900;letter-spacing:-.08em}
+.promise-mark{width:62px;height:62px;display:grid;place-items:center;margin-top:1.8rem;border-radius:50%;background:var(--gold);color:#42100e;font-size:1.65rem;font-weight:950}
+.promise-card h2{margin:1.4rem 0 .1rem;color:#fff;font-size:clamp(2rem,4vw,3.8rem);line-height:.92;letter-spacing:-.055em}
+.promise-alt{display:block;color:#ffd98d;font-size:1.1rem;font-weight:800}
+.promise-card p{max-width:330px;margin:1rem 0 0;color:#f2d7ca;line-height:1.65}
+.dal-showcase{background:#fffdf8}
+.dal-pack-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.dal-pack-card{padding:1rem;border:1px solid #e2cdb2;border-radius:1rem;background:#fff}
+.dal-pack-visual{height:410px;display:grid;place-items:center;overflow:hidden;border-radius:.8rem;background:linear-gradient(155deg,#fff 0%,var(--accent-soft,#f5e5d5) 100%)}
+.dal-pack-visual img{width:100%;height:100%;object-fit:contain;padding:.75rem}
+.dal-pack-info{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 0 .65rem}
+.dal-pack-info h3{margin:0;color:#491411;font-size:1.25rem}
+.dal-pack-info span{display:block;margin-top:.2rem;color:#785f55;font-size:.9rem}
+.weight-badge{min-width:78px;padding:.65rem .7rem;border-radius:.65rem;background:var(--maroon);color:white;text-align:center;font-size:1rem}
+.photo-pending{max-width:250px;padding:1.2rem;border:1px dashed #a88c7d;border-radius:.8rem;text-align:center;color:#5d4038;background:rgba(255,255,255,.72)}
+.photo-pending strong,.photo-pending span{display:block}
+.photo-pending span{margin-top:.45rem;font-size:.82rem;line-height:1.45;color:#80675e}
+.weight-section{background:#f6ead7}
+.weight-compare{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.weight-side{min-height:390px;padding:2rem;border-radius:1.1rem;border:1px solid #dfc8aa;background:#fffdf8}
+.loose-side{background:#fff8ee}
+.saanjh-side{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+.compare-label{display:inline-block;padding:.42rem .65rem;border-radius:99px;background:#ead9c2;color:#5b332b;font-size:.72rem;font-weight:850;letter-spacing:.07em;text-transform:uppercase}
+.saanjh-side .compare-label{background:rgba(255,255,255,.14);color:#fff3df}
+.scale-visual{width:124px;height:124px;display:grid;place-items:center;margin:2rem 0 1.4rem;border:3px solid #cba678;border-radius:50%;color:#5b211a;font-size:2rem;font-weight:950;letter-spacing:-.05em}
+.saanjh-side .scale-visual{border-color:#f3bf57;color:#f3bf57}
+.weight-side h3{margin:0 0 .75rem;color:#4a1714;font-size:clamp(1.5rem,3vw,2.2rem);line-height:1.12}
+.saanjh-side h3{color:#fff}
+.weight-side p{margin:0;color:#70574d;line-height:1.7}
+.saanjh-side p{color:#efd4ca}
+.comparison-note{margin:1rem 0 0;color:#765d53;font-size:.85rem;line-height:1.6}
+.availability-section{background:#fff}
+.availability-box{display:flex;align-items:center;justify-content:space-between;gap:2rem;padding:2.5rem;border-radius:1.2rem;background:#481311;color:#fff}
+.availability-box h2{max-width:700px;margin:.5rem 0 .6rem;font-size:clamp(2rem,4vw,3.2rem);line-height:1.05}
+.availability-box p{max-width:680px;margin:0;color:#edd5cb;line-height:1.65}
+.availability-box .button{background:var(--gold);border-color:var(--gold);color:#3f170f}
+.availability-box .button.secondary{background:transparent;border-color:#efd5c5;color:#fff}
+.retailer-economics-section{background:#fffdf8}
+.margin-formula-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.margin-formula{min-height:300px;padding:1.5rem;border:1px solid #e0c9ad;border-radius:1rem;background:#fff}
+.margin-formula.primary-formula{background:#4b1412;color:#fff;border-color:#4b1412}
+.margin-formula>span{display:inline-grid;width:38px;height:38px;place-items:center;border-radius:50%;background:#f4e6d4;color:#5d1c17;font-weight:900}
+.primary-formula>span{background:#efaa2b;color:#3f160f}
+.margin-formula h3{margin:1.1rem 0 .75rem;color:#4d1613;font-size:1.3rem}
+.primary-formula h3{color:#fff}
+.formula{min-height:78px;display:flex;align-items:center;padding:1rem;border-radius:.75rem;background:#f8ead7;color:#511711;font-weight:900;font-size:1.08rem;line-height:1.35}
+.primary-formula .formula{background:rgba(255,255,255,.1);color:#ffd77e}
+.margin-formula p{margin:1rem 0 0;color:#71594f;line-height:1.65}
+.primary-formula p{color:#eed3c8}
+.retailer-trade-checklist{display:grid;grid-template-columns:.85fr 1.15fr;gap:2rem;margin-top:1rem;padding:2rem;border-radius:1rem;background:#f5e6d2}
+.retailer-trade-checklist h2{margin:.5rem 0;color:#4b1412;font-size:clamp(1.8rem,3vw,2.7rem)}
+.retailer-trade-checklist ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:.65rem}
+.retailer-trade-checklist li{padding:.9rem;border:1px solid #dfc8ac;border-radius:.75rem;background:#fffdf8;color:#624a42;line-height:1.45}
+.retailer-trade-checklist li strong{color:var(--maroon)}
+.retailer-supply-section{background:#f6ead7}
+.supply-principles{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.supply-principles article{padding:1.4rem;border-radius:.9rem;background:#fffdf8;border:1px solid #dfc8ac}
+.supply-principles article>span{width:38px;height:38px;display:grid;place-items:center;border-radius:50%;background:var(--maroon);color:#fff;font-weight:900}
+.supply-principles h3{margin:1rem 0 .45rem;color:#4b1412;font-size:1.08rem}
+.supply-principles p{margin:0;color:#6e554b;line-height:1.6;font-size:.92rem}
+.retailer-range-section{background:#fff}
+.retailer-sku-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.7rem}
+.retailer-sku-grid article{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 1.1rem;border:1px solid #e2cdb3;border-radius:.8rem;background:#fffdf8}
+.retailer-sku-grid strong,.retailer-sku-grid span,.retailer-sku-grid b{display:block}
+.retailer-sku-grid strong{color:#4b1512}
+.retailer-sku-grid span{margin-top:.2rem;color:#7d6258;font-size:.8rem}
+.retailer-sku-grid b{margin-top:.25rem;color:var(--maroon);text-align:right}
+.retailer-contact-section{background:#fff9ee}
+.retailer-contact-grid{align-items:start}
+.retailer-availability-note{margin:1.2rem 0;padding:1rem;border-left:4px solid var(--gold);background:#fff}
+.retailer-availability-note strong{color:#4b1412}
+.retailer-availability-note p{margin:.3rem 0 0}
+.retailer-wa-large{width:100%;min-height:54px;text-align:center;padding-inline:1.1rem}
+@media(max-width:1000px){
+  .promise-stage-grid,.dal-pack-grid,.margin-formula-grid{grid-template-columns:repeat(2,1fr)}
+  .promise-card:last-child,.dal-pack-card:last-child,.margin-formula:last-child{grid-column:1/-1}
+  .supply-principles{grid-template-columns:repeat(2,1fr)}
+  .retailer-trade-checklist{grid-template-columns:1fr}
+}
+@media(max-width:720px){
+  .promise-stage{padding:1rem 0 3rem}
+  .promise-stage-grid,.dal-pack-grid,.weight-compare,.margin-formula-grid,.supply-principles,.retailer-sku-grid{grid-template-columns:1fr}
+  .promise-card,.promise-card:last-child,.dal-pack-card:last-child,.margin-formula:last-child{grid-column:auto}
+  .promise-card{min-height:270px}
+  .promise-card h2{font-size:2.45rem}
+  .dal-pack-visual{height:390px}
+  .weight-side{min-height:0;padding:1.35rem}
+  .availability-box{display:block;padding:2rem 1.25rem}
+  .availability-box .actions{display:grid;margin-top:1.3rem}
+  .retailer-trade-checklist{padding:1.25rem}
+  .retailer-trade-checklist ol{grid-template-columns:1fr}
+  .retailer-sku-grid article{align-items:flex-start}
+}
